@@ -3,27 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>App de Liquidación</title>
+  <title>Liquidación</title>
   <style>
     body {
       font-family: sans-serif;
-      background: #f0f0f0;
+      background: #fff;
       margin: 0;
       padding: 0;
     }
 
     .container {
-      padding: 1rem;
       max-width: 600px;
       margin: auto;
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      padding: 1rem;
     }
 
-    h1, h2 {
+    .banner {
+      width: 100%;
+      border-radius: 12px;
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-size: 2rem;
       text-align: center;
-      color: #333;
+      color: #222;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      margin-top: 1.5rem;
+      text-align: center;
+      color: #4CAF50;
     }
 
     .seccion {
@@ -31,96 +42,62 @@
     }
 
     label {
-      display: block;
-      margin-bottom: 0.5rem;
       font-weight: bold;
+      display: block;
+      margin: 1rem 0 0.5rem;
     }
 
     select, input[type="number"] {
       width: 100%;
       padding: 1rem;
       font-size: 1.2rem;
-      border: 1px solid #ccc;
       border-radius: 8px;
-      margin-bottom: 1rem;
+      border: 1px solid #ccc;
     }
 
     button {
       width: 100%;
-      padding: 1rem;
-      font-size: 1.2rem;
-      background-color: #4CAF50;
-      color: white;
+      padding: 1.2rem;
+      font-size: 1.3rem;
+      background: #4CAF50;
+      color: #fff;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
-      margin-bottom: 1rem;
+      margin-top: 1rem;
     }
 
     button:hover {
-      background-color: #45a049;
+      background: #45a049;
     }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    table th, table td {
-      padding: 0.75rem;
-      text-align: center;
-      border-bottom: 1px solid #ddd;
-    }
-
-    .verde {
-      color: green;
-      font-weight: bold;
+    .totales {
+      margin-top: 1rem;
       font-size: 1.2rem;
-    }
-
-    .rojo {
-      color: darkred;
-      font-weight: bold;
-      font-size: 1.2rem;
+      line-height: 1.6;
+      color: #333;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Liquidación de Productos</h1>
+    <img src="banner.jpg" alt="Banner" class="banner">
+    <h1>¡Hola! ¿Qué vendiste hoy?</h1>
 
     <div class="seccion">
-      <button id="cargarBtn">📦 Cargar Inventario</button>
-    </div>
-
-    <div class="seccion" id="ventaSection" style="display:none">
+      <h2>Seleccionar Productos</h2>
       <label for="producto">Producto:</label>
       <select id="producto"></select>
-
       <label for="cantidad">Cantidad:</label>
       <input type="number" id="cantidad" min="1" value="1">
-
       <button id="agregarBtn">➕ Agregar</button>
     </div>
 
-    <div class="seccion">
-      <h2>Carrito</h2>
-      <table id="carrito">
-        <thead>
-          <tr>
-            <th>Producto</th>
-            <th>Cantidad</th>
-            <th>Subtotal</th>
-            <th>Ganancia</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-
-    <div class="seccion">
-      <p id="totalVenta" class="verde"></p>
-      <p id="totalGanancia" class="rojo"></p>
+    <div class="seccion" id="carritoSeccion">
+      <h2>Resumen de Venta</h2>
+      <div id="resumen"></div>
+      <button id="calcularBtn">🧮 Calcular Totales</button>
+      <div class="totales" id="totales"></div>
       <button id="exportarPDF">📤 Exportar PDF</button>
     </div>
   </div>
