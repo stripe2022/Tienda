@@ -193,3 +193,35 @@ exportarBtn.addEventListener('click', () => {
   document.getElementById('producto').value = '';
   document.getElementById('cantidad').value = '1';
 });
+
+const actualizarBtn = document.getElementById('actualizarAlmacenBtn');
+actualizarBtn.addEventListener('click', async () => {
+  if (carrito.length === 0) {
+    alert("No hay productos en el carrito.");
+    return;
+  }
+
+  // Confirmación
+  if (!confirm("¿Seguro que quieres rebajar productos en el Almacen ")) return;
+
+  const productosEnSupabase = await obtenerProductos();
+
+  for (const item of carrito) {
+    const encontrado = productosEnSupabase.find(p => p.nombre === item.nombre);
+    if (encontrado) {
+      await rebajarStock(encontrado.id, item.cantidad);
+      console.log(`📉 Stock actualizado para: ${item.nombre}`);
+    } else {
+      console.warn(`⚠️ Producto no encontrado en Supabase: ${item.nombre}`);
+    }
+  }
+
+  alert("✅ Almacén actualizado correctamente");
+
+  // Limpiar interfaz
+  carrito = [];
+  document.getElementById('resumen').innerHTML = '';
+  document.getElementById('totales').innerHTML = '';
+  document.getElementById('producto').value = '';
+  document.getElementById('cantidad').value = '1';
+});
