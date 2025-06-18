@@ -14,6 +14,15 @@ fetch('productos.json')
     }));
 
     const selector = document.getElementById('producto');
+
+    // Agregar opción en blanco al inicio
+    const defaultOption = document.createElement('option');
+    defaultOption.value = '';
+    defaultOption.textContent = '-- Selecciona un producto --';
+    defaultOption.disabled = true;
+    defaultOption.selected = true;
+    selector.appendChild(defaultOption);
+
     inventario.forEach((item, index) => {
       const option = document.createElement('option');
       option.value = index;
@@ -30,7 +39,12 @@ fetch('productos.json')
 const agregarBtn = document.getElementById('agregarBtn');
 agregarBtn.addEventListener('click', () => {
   const index = document.getElementById('producto').value;
-  const cantidad = parseInt(document.getElementById('cantidad').value);
+  const cantidadInput = document.getElementById('cantidad');
+  const selector = document.getElementById('producto');
+
+  if (index === '') return;
+
+  const cantidad = parseInt(cantidadInput.value);
   const producto = inventario[index];
 
   const existente = carrito.find(p => p.nombre === producto.nombre);
@@ -41,6 +55,10 @@ agregarBtn.addEventListener('click', () => {
   }
 
   mostrarResumen();
+
+  // Limpiar selector y cantidad
+  selector.value = '';
+  cantidadInput.value = '1';
 });
 
 function mostrarResumen() {
