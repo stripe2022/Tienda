@@ -64,9 +64,42 @@ function mostrarResumen() {
 
   carrito.forEach(item => {
     const subtotal = item.precio_venta * item.cantidad;
-    const div = document.createElement('div');
-    div.innerHTML = `<strong style="font-size: 1.2rem;">${item.nombre}</strong> x${item.cantidad} - Precio: $${item.precio_venta} - Subtotal: $${subtotal}`;
-    contenedor.appendChild(div);
+
+    const card = document.createElement('div');
+    card.style.marginBottom = '1rem';
+
+    const linea1 = document.createElement('div');
+    linea1.style.display = 'flex';
+    linea1.style.justifyContent = 'space-between';
+    linea1.style.alignItems = 'center';
+
+    const titulo = document.createElement('strong');
+    titulo.style.fontSize = '1.1rem';
+    titulo.textContent = `${item.nombre} x${item.cantidad}`;
+
+    const boton = document.createElement('button');
+    boton.className = 'btn-borrar';
+    boton.textContent = 'X';
+
+    boton.title = 'Eliminar';
+    boton.dataset.nombre = item.nombre;
+
+    boton.addEventListener('click', (e) => {
+      const nombre = e.target.dataset.nombre;
+      carrito = carrito.filter(p => p.nombre !== nombre);
+      mostrarResumen();
+    });
+
+    linea1.appendChild(titulo);
+    linea1.appendChild(boton);
+
+    const linea2 = document.createElement('div');
+    linea2.style.marginLeft = '0.5rem';
+    linea2.textContent = `Precio: $${item.precio_venta} - Subtotal: $${subtotal}`;
+
+    card.appendChild(linea1);
+    card.appendChild(linea2);
+    contenedor.appendChild(card);
   });
 }
 
