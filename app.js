@@ -102,11 +102,13 @@ exportarBtn.addEventListener('click', () => {
 
   doc.setFont(undefined, 'bold');
   doc.text("Producto", 10, y);
-  doc.text("Cantidad", 70, y);
+  doc.text("Cantidad", 60, y);
   doc.setTextColor(200, 0, 0);
-  doc.text("Costo", 100, y);
+  doc.text("Costo", 90, y);
+  doc.setTextColor(0, 150, 0);
+  doc.text("Precio Venta", 120, y);
   doc.setTextColor(0);
-  doc.text("Subtotal", 140, y);
+  doc.text("Subtotal", 160, y);
   doc.setFont(undefined, 'normal');
   y += 8;
 
@@ -115,11 +117,13 @@ exportarBtn.addEventListener('click', () => {
     doc.setFontSize(11);
     doc.setTextColor(0);
     doc.text(item.nombre, 10, y);
-    doc.text(`x${item.cantidad}`, 70, y);
+    doc.text(`x${item.cantidad}`, 60, y);
     doc.setTextColor(255, 0, 0);
-    doc.text(`$${item.costo}`, 100, y);
+    doc.text(`$${item.costo}`, 90, y);
+    doc.setTextColor(0, 150, 0);
+    doc.text(`$${item.precio_venta}`, 120, y);
     doc.setTextColor(0);
-    doc.text(`$${subtotal}`, 140, y);
+    doc.text(`$${subtotal}`, 160, y);
     y += 8;
   });
 
