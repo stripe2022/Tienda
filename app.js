@@ -15,7 +15,6 @@ fetch('productos.json')
 
     const selector = document.getElementById('producto');
 
-    // Agregar opción en blanco al inicio
     const defaultOption = document.createElement('option');
     defaultOption.value = '';
     defaultOption.textContent = '-- Selecciona un producto --';
@@ -35,7 +34,6 @@ fetch('productos.json')
     console.error("Error:", error);
   });
 
-// Agregar producto al carrito
 const agregarBtn = document.getElementById('agregarBtn');
 agregarBtn.addEventListener('click', () => {
   const index = document.getElementById('producto').value;
@@ -56,7 +54,6 @@ agregarBtn.addEventListener('click', () => {
 
   mostrarResumen();
 
-  // Limpiar selector y cantidad
   selector.value = '';
   cantidadInput.value = '1';
 });
@@ -68,12 +65,11 @@ function mostrarResumen() {
   carrito.forEach(item => {
     const subtotal = item.precio_venta * item.cantidad;
     const div = document.createElement('div');
-    div.innerHTML = `<strong>${item.nombre}</strong> x${item.cantidad} - Precio: $${item.precio_venta} - Subtotal: $${subtotal}`;
+    div.innerHTML = `<strong style="font-size: 1.2rem;">${item.nombre}</strong> x${item.cantidad} - Precio: $${item.precio_venta} - Subtotal: $${subtotal}`;
     contenedor.appendChild(div);
   });
 }
 
-// Calcular totales
 const calcularBtn = document.getElementById('calcularBtn');
 calcularBtn.addEventListener('click', () => {
   let totalVenta = 0;
@@ -88,6 +84,63 @@ calcularBtn.addEventListener('click', () => {
   totales.innerHTML = `
     <p><strong>Total vendido:</strong> $${totalVenta}</p>
     <p><strong>Inversión total:</strong> $${totalCosto}</p>
-    <p><strong>Ganancia:</strong> $${totalVenta - totalCosto}</p>
+    <p style="color:green;"><strong>Ganancia:</strong> $${totalVenta - totalCosto}</p>
   `;
+});
+
+const exportarBtn = document.getElementById('exportarPDF');
+exportarBtn.addEventListener('click', () => {
+  const doc = new window.jspdf.jsPDF();
+  const hoy = new Date().toLocaleDateString();
+
+  doc.setFontSize(16);
+  doc.text(`Resumen de Venta - ${hoy}`, 10, 15);
+
+  let y = 30;
+  doc.setFontSize(12);
+  doc.setTextColor(0);
+
+  doc.setFont(undefined, 'bold');
+  doc.text("Producto", 10, y);
+  doc.text("Cantidad", 70, y);
+  doc.setTextColor(200, 0, 0);
+  doc.text("Costo", 100, y);
+  doc.setTextColor(0);
+  doc.text("Subtotal", 140, y);
+  doc.setFont(undefined, 'normal');
+  y += 8;
+
+  carrito.forEach(item => {
+    const subtotal = item.precio_venta * item.cantidad;
+    doc.setFontSize(11);
+    doc.setTextColor(0);
+    doc.text(item.nombre, 10, y);
+    doc.text(`x${item.cantidad}`, 70, y);
+    doc.setTextColor(255, 0, 0);
+    doc.text(`$${item.costo}`, 100, y);
+    doc.setTextColor(0);
+    doc.text(`$${subtotal}`, 140, y);
+    y += 8;
+  });
+
+  let totalVenta = 0;
+  let totalCosto = 0;
+  carrito.forEach(item => {
+    totalVenta += item.precio_venta * item.cantidad;
+    totalCosto += item.costo * item.cantidad;
+  });
+  const ganancia = totalVenta - totalCosto;
+
+  y += 10;
+  doc.setFontSize(13);
+  doc.setTextColor(0);
+  doc.text(`Total vendido: $${totalVenta}`, 10, y);
+  y += 8;
+  doc.text(`Inversión total: $${totalCosto}`, 10, y);
+  y += 8;
+  doc.setTextColor(0, 150, 0);
+  doc.setFont(undefined, 'bold');
+  doc.text(`Ganancia: $${ganancia}`, 10, y);
+
+  doc.save(`liquidacion_${hoy.replace(/\//g, '-')}.pdf`);
 });
