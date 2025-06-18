@@ -116,7 +116,8 @@ exportarBtn.addEventListener('click', () => {
     const subtotal = item.precio_venta * item.cantidad;
     doc.setFontSize(11);
     doc.setTextColor(0);
-    doc.text(item.nombre, 10, y);
+    const splitNombre = doc.splitTextToSize(item.nombre, 45);
+    doc.text(splitNombre, 10, y);
     doc.text(`x${item.cantidad}`, 60, y);
     doc.setTextColor(255, 0, 0);
     doc.text(`$${item.costo}`, 90, y);
@@ -124,7 +125,7 @@ exportarBtn.addEventListener('click', () => {
     doc.text(`$${item.precio_venta}`, 120, y);
     doc.setTextColor(0);
     doc.text(`$${subtotal}`, 160, y);
-    y += 8;
+    y += (splitNombre.length * 6);
   });
 
   let totalVenta = 0;
@@ -147,4 +148,11 @@ exportarBtn.addEventListener('click', () => {
   doc.text(`Ganancia: $${ganancia}`, 10, y);
 
   doc.save(`liquidacion_${hoy.replace(/\//g, '-')}.pdf`);
+
+  // Limpiar app
+  carrito = [];
+  document.getElementById('resumen').innerHTML = '';
+  document.getElementById('totales').innerHTML = '';
+  document.getElementById('producto').value = '';
+  document.getElementById('cantidad').value = '1';
 });
