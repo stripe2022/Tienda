@@ -1,19 +1,20 @@
 // app.js
+import { obtenerProductos, rebajarStock, actualizarProducto } from './supabase-api.js';
 
 let inventario = [];
 let carrito = [];
 
-// Cargar productos desde productos.json
-fetch('productos.json')
-  .then(response => response.json())
+// Cargar productos desde Supabase
+obtenerProductos()
   .then(data => {
-    inventario = data.productos.map(p => ({
+    inventario = data.map(p => ({
       nombre: p.nombre,
-      precio_venta: p.precioVenta,
-      costo: p.precioCosto
+      precio_venta: p.precio_venta,
+      costo: p.precio_costo
     }));
 
     const selector = document.getElementById('producto');
+    selector.innerHTML = ''; // limpiar opciones previas
 
     const defaultOption = document.createElement('option');
     defaultOption.value = '';
@@ -28,11 +29,14 @@ fetch('productos.json')
       option.textContent = item.nombre;
       selector.appendChild(option);
     });
+
+    console.log("✅ Productos cargados desde Supabase:", inventario);
   })
   .catch(error => {
-    alert("No se pudo cargar productos.json");
+    alert("❌ No se pudo cargar productos desde Supabase");
     console.error("Error:", error);
   });
+
 
 const agregarBtn = document.getElementById('agregarBtn');
 agregarBtn.addEventListener('click', () => {
