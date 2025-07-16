@@ -13,6 +13,9 @@ fetch('productos.json')
       costo: p.precioCosto
     }));
 
+    // ORDENAR ALFABÉTICAMENTE POR NOMBRE
+inventario.sort((a, b) => a.nombre.localeCompare(b.nombre));
+
     const selector = document.getElementById('producto');
 
     const defaultOption = document.createElement('option');
