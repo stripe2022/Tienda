@@ -185,10 +185,16 @@ exportarBtn.addEventListener('click', () => {
 
   doc.save(`liquidacion_${hoy.replace(/\//g, '-')}.pdf`);
 
-  // Limpiar app
-  carrito = [];
-  document.getElementById('resumen').innerHTML = '';
-  document.getElementById('totales').innerHTML = '';
-  document.getElementById('producto').value = '';
-  document.getElementById('cantidad').value = '1';
+ 
+});
+
+const limpiarBtn = document.getElementById('limpiarBtn');
+limpiarBtn.addEventListener('click', () => {
+  if (confirm("¿Estás seguro que deseas borrar todo el reporte actual?")) {
+    carrito = [];
+    document.getElementById('resumen').innerHTML = '';
+    document.getElementById('totales').innerHTML = '';
+    document.getElementById('producto').value = '';
+    document.getElementById('cantidad').value = '1';
+  }
 });
