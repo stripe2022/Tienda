@@ -31,6 +31,8 @@ inventario.sort((a, b) => a.nombre.localeCompare(b.nombre));
       option.textContent = item.nombre;
       selector.appendChild(option);
     });
+    document.getElementById('totalProductos').textContent = `${inventario.length} productos`;
+
   })
   .catch(error => {
     alert("No se pudo cargar productos.json");
