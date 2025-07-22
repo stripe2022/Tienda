@@ -137,7 +137,6 @@ exportarBtn.addEventListener('click', () => {
   let y = 30;
   doc.setFontSize(12);
   doc.setTextColor(0);
-
   doc.setFont(undefined, 'bold');
   doc.text("Producto", 10, y);
   doc.text("Cantidad", 60, y);
@@ -152,9 +151,31 @@ exportarBtn.addEventListener('click', () => {
 
   carrito.forEach(item => {
     const subtotal = item.precio_venta * item.cantidad;
+    const splitNombre = doc.splitTextToSize(item.nombre, 45);
+    const lineHeight = splitNombre.length * 6;
+
+    // 🔁 SALTO DE PÁGINA SI PASAMOS DEL LÍMITE
+    if (y + lineHeight + 8 > 270) {
+      doc.addPage();
+      y = 30;
+
+      doc.setFontSize(12);
+      doc.setFont(undefined, 'bold');
+      doc.text("Producto", 10, y);
+      doc.text("Cantidad", 60, y);
+      doc.setTextColor(200, 0, 0);
+      doc.text("Costo", 90, y);
+      doc.setTextColor(0, 150, 0);
+      doc.text("Precio Venta", 120, y);
+      doc.setTextColor(0);
+      doc.text("Subtotal", 160, y);
+      doc.setFont(undefined, 'normal');
+      y += 8;
+    }
+
+    // ✏️ DATOS DEL PRODUCTO
     doc.setFontSize(11);
     doc.setTextColor(0);
-    const splitNombre = doc.splitTextToSize(item.nombre, 45);
     doc.text(splitNombre, 10, y);
     doc.text(`x${item.cantidad}`, 60, y);
     doc.setTextColor(255, 0, 0);
@@ -163,9 +184,16 @@ exportarBtn.addEventListener('click', () => {
     doc.text(`$${item.precio_venta}`, 120, y);
     doc.setTextColor(0);
     doc.text(`$${subtotal}`, 160, y);
-    y += (splitNombre.length * 6);
+
+    y += lineHeight;
+
+    // ➖ LÍNEA DIVISORA
+    doc.setDrawColor(200);
+    doc.line(10, y, 200, y);
+    y += 5;
   });
 
+  // ✅ TOTALES FINALES
   let totalVenta = 0;
   let totalCosto = 0;
   carrito.forEach(item => {
@@ -173,6 +201,11 @@ exportarBtn.addEventListener('click', () => {
     totalCosto += item.costo * item.cantidad;
   });
   const ganancia = totalVenta - totalCosto;
+
+  if (y > 250) {
+    doc.addPage();
+    y = 30;
+  }
 
   y += 10;
   doc.setFontSize(13);
@@ -185,10 +218,10 @@ exportarBtn.addEventListener('click', () => {
   doc.setFont(undefined, 'bold');
   doc.text(`Ganancia: $${ganancia}`, 10, y);
 
+  // 💾 GUARDAR PDF
   doc.save(`liquidacion_${hoy.replace(/\//g, '-')}.pdf`);
-
- 
 });
+
 
 const limpiarBtn = document.getElementById('limpiarBtn');
 limpiarBtn.addEventListener('click', () => {
